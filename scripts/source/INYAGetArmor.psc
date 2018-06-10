@@ -1,7 +1,7 @@
 Scriptname INYAGetArmor extends ReferenceAlias  
 
 Event OnItemAdded(Form akBaseItem, Int aiItemCount, ObjectReference akItemReference, ObjectReference akSourceContainer) 
-	if (INYAIndoorOnlyMode.GetValue() == 1 && !akSourceContainer.IsInInterior())
+	if (INYAIndoorOnlyMode.GetValue() == 1 && akSourceContainer && !akSourceContainer.IsInInterior())
 		return
 	endif
 	
@@ -9,27 +9,29 @@ Event OnItemAdded(Form akBaseItem, Int aiItemCount, ObjectReference akItemRefere
 	
 	if (act && act.IsDead())
 		Armor amr = akBaseItem as Armor
-		if (amr && amr.HasKeyWord(ArmorCuirass) || amr.HasKeyWord(ClothingBody))
-			Actor selfact = self.GetActorRef()
-			ActorBase selfbase = selfact.GetActorBase()
-			ActorBase srcbase = act.GetActorBase()
-			
-			if (selfbase.GetSex() != srcbase.GetSex())
-				self.returnitem(selfact, akBaseItem, akSourceContainer)
-				self.log("It's not fit for you : Gender")
-			elseif (INYAWeightMode.GetValue() == 1)
-				float selfweight = selfbase.GetWeight()
-				float srcweight = srcbase.GetWeight()
-				if (selfweight != srcweight)
+		if (amr)
+			if (amr.HasKeyWord(ArmorCuirass) || amr.HasKeyWord(ClothingBody))
+				Actor selfact = self.GetActorRef()
+				ActorBase selfbase = selfact.GetActorBase()
+				ActorBase srcbase = act.GetActorBase()
+				
+				if (selfbase.GetSex() != srcbase.GetSex())
 					self.returnitem(selfact, akBaseItem, akSourceContainer)
-					self.log("It's not fit for you : Weight : " + selfweight as int + " and " + srcweight as int)
-				endif
-			elseif (INYAScaleMode.GetValue() == 1)
-				float selfheight = selfbase.GetHeight() * self.GetRef().GetScale()
-				float srcheight = srcbase.GetHeight() * akSourceContainer.GetScale()
-				if (selfheight != srcheight)
-					self.returnitem(selfact, akBaseItem, akSourceContainer)
-					self.log("It's not fit for you : Height : " + selfheight as int + " and " + srcheight as int)
+					self.log("It's not fit for you : Gender")
+				elseif (INYAWeightMode.GetValue() == 1)
+					float selfweight = selfbase.GetWeight()
+					float srcweight = srcbase.GetWeight()
+					if (selfweight != srcweight)
+						self.returnitem(selfact, akBaseItem, akSourceContainer)
+						self.log("It's not fit for you : Weight : " + selfweight as int + " and " + srcweight as int)
+					endif
+				elseif (INYAScaleMode.GetValue() == 1)
+					float selfheight = selfbase.GetHeight() * self.GetRef().GetScale()
+					float srcheight = srcbase.GetHeight() * akSourceContainer.GetScale()
+					if (selfheight != srcheight)
+						self.returnitem(selfact, akBaseItem, akSourceContainer)
+						self.log("It's not fit for you : Height : " + selfheight as int + " and " + srcheight as int)
+					endif
 				endif
 			endif
 		endif
