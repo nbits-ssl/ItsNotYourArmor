@@ -13,7 +13,7 @@ Event OnItemAdded(Form akBaseItem, Int aiItemCount, ObjectReference akItemRefere
 			if (amr.HasKeyWord(ArmorCuirass) || amr.HasKeyWord(ClothingBody))
 				Actor selfact = self.GetActorRef()
 				ActorBase selfbase = selfact.GetActorBase()
-				ActorBase srcbase = act.GetActorBase()
+				ActorBase srcbase = act.GetLeveledActorBase()
 				
 				if (selfbase.GetSex() != srcbase.GetSex())
 					self.returnitem(selfact, akBaseItem, akSourceContainer)
