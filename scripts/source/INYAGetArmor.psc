@@ -6,11 +6,13 @@ Event OnItemAdded(Form akBaseItem, Int aiItemCount, ObjectReference akItemRefere
 	endif
 	
 	Actor act = akSourceContainer as Actor
-	
+	int slotsChecked = INYASlotMask.GetValueInt()
+
 	if (act && act.IsDead())
 		Armor amr = akBaseItem as Armor
 		if (amr)
-			if (amr.HasKeyWord(ArmorCuirass) || amr.HasKeyWord(ClothingBody))
+			int slotmask = amr.GetSlotMask()
+			if (Math.LogicalAnd(slotsChecked, slotmask) != 0x00)
 				Actor selfact = self.GetActorRef()
 				ActorBase selfbase = selfact.GetActorBase()
 				ActorBase srcbase = act.GetLeveledActorBase()
@@ -57,6 +59,4 @@ GlobalVariable Property INYAIndoorOnlyMode  Auto
 GlobalVariable Property INYAScaleMode  Auto  
 GlobalVariable Property INYAWeightMode  Auto  
 GlobalVariable Property INYADebugMode  Auto  
-Keyword Property ArmorCuirass  Auto  
-Keyword Property ClothingBody  Auto  
-
+GlobalVariable Property INYASlotMask  Auto  
